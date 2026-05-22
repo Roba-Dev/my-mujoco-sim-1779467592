@@ -1,0 +1,90 @@
+{
+  "sessionId": "sess_r3694ak5",
+  "fullHistory": [
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "assistant",
+      "content": "Floor size updated to 5 × 5 × 0.05 in **assets/scenes/unitree_g1.xml**. Select this scene in Roba Studio’s dropdown to see the change."
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    }
+  ],
+  "agentHistory": [
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "assistant",
+      "content": "Floor size updated to 5 × 5 × 0.05 in **assets/scenes/unitree_g1.xml**. Select this scene in Roba Studio’s dropdown to see the change."
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    },
+    {
+      "role": "user",
+      "content": "change the floor size of unitree g1 robot model"
+    }
+  ],
+  "compressionCount": 0,
+  "workspaceRoot": "/home/farid/mojoco/robacreatorhub_server2/roba/roba-laravel/repos/Roba-Dev/my-mujoco-sim-1779467592",
+  "savedAt": 1779468935438
+}
