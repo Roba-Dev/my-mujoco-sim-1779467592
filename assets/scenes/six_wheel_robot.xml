@@ -51,9 +51,9 @@
         </body>
     </worldbody>
     <actuator>
-        <motor name="fl_motor"  joint="fl_hinge"/>
+        <motor name="fl_motor" joint="fl_hinge" gear="200"/>
         <motor name="fr_motor"  joint="fr_hinge"/>
-        <motor name="ml_motor"  joint="ml_hinge"/>
+        <motor name="ml_motor" joint="ml_hinge" gear="200"/>
         <motor name="mr_motor"  joint="mr_hinge"/>
         <motor name="rl_motor"  joint="rl_hinge"/>
         <motor name="rr_motor"  joint="rr_hinge"/>
