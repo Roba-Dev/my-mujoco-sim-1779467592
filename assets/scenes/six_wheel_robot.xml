@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mujoco model="six_wheel_robot">
+    <compiler angle="radian"/>
+    <option timestep="0.002" integrator="implicitfast" iterations="50"/>
+    <default>
+        <geom conaffinity="1" condim="3" margin="0.05" material="black" rgba="0.2 0.2 0.2 1"/>
+        <joint armature="0.01" damping="0.1" limited="true"/>
+        <motor gear="100"/>
+    </default>
+    <asset>
+        <material name="black" rgba="0.2 0.2 0.2 1"/>
+        <material name="grid" rgba="0.8 0.8 0.8 1"/>
+    </asset>
+    <worldbody>
+        <!-- Floor -->
+        <geom name="floor" type="plane" size="5 5 0.1" material="grid"/>
+        
+        <!-- Main chassis -->
+        <body name="chassis" pos="0 0 0.5">
+            <geom name="chassis_body" type="box" size="0.5 0.3 0.2" material="black"/>
+            <site name="com" pos="0 0 0.5"/>
+        </body>
+
+        <!-- Wheel configuration: 6 wheels in 3x2 arrangement -->
+        <!-- Front left -->
+        <body name="fl" pos="-0.4 0.3 0.3">
+            <joint name="fl_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="fl_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+        <body name="fr" pos="0.4 0.3 0.3">
+            <joint name="fr_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="fr_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+        <!-- Middle left -->
+        <body name="ml" pos="-0.2 0 0.3">
+            <joint name="ml_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="ml_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+        <body name="mr" pos="0.2 0 0.3">
+            <joint name="mr_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="mr_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+        <!-- Rear left -->
+        <body name="rl" pos="-0.4 -0.3 0.3">
+            <joint name="rl_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="rl_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+        <body name="rr" pos="0.4 -0.3 0.3">
+            <joint name="rr_hinge" type="hinge" axis="0 0 1" pos="0 0 0" range="-0.5 0.5"/>
+            <geom name="rr_wheel" type="cylinder" size="0.1 0.2" material="black" fromto="0.2 0 0 0 0 0"/>
+        </body>
+    </worldbody>
+    <actuator>
+        <motor name="fl_motor"  joint="fl_hinge"/>
+        <motor name="fr_motor"  joint="fr_hinge"/>
+        <motor name="ml_motor"  joint="ml_hinge"/>
+        <motor name="mr_motor"  joint="mr_hinge"/>
+        <motor name="rl_motor"  joint="rl_hinge"/>
+        <motor name="rr_motor"  joint="rr_hinge"/>
+    </actuator>
+</mujoco>
