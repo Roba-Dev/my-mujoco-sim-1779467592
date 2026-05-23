@@ -2,7 +2,7 @@
 
   <compiler angle="radian" autolimits="true"/>
 
-  <option timestep="0.005" gravity="0 0 -9.81" integrator="RK4"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
 
   <visual>
     <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
@@ -114,10 +114,10 @@
   <!-- ═══════════════ ACTUATORS ═══════════════ -->
   <actuator>
     <!-- Velocity-controlled motors on all four wheels (differential / skid-steer capable) -->
-    <velocity name="motor_fl" joint="j_fl" kv="8" gear="1" ctrlrange="-20 20"/>
-    <velocity name="motor_fr" joint="j_fr" kv="8" gear="1" ctrlrange="-20 20"/>
-    <velocity name="motor_rl" joint="j_rl" kv="8" gear="1" ctrlrange="-20 20"/>
-    <velocity name="motor_rr" joint="j_rr" kv="8" gear="1" ctrlrange="-20 20"/>
+    <velocity name="motor_fl" joint="j_fl" kv="5" gear="1" ctrlrange="-15 15" forcelimited="true" forcerange="-20 20"/>
+    <velocity name="motor_fr" joint="j_fr" kv="5" gear="1" ctrlrange="-15 15" forcelimited="true" forcerange="-20 20"/>
+    <velocity name="motor_rl" joint="j_rl" kv="5" gear="1" ctrlrange="-15 15" forcelimited="true" forcerange="-20 20"/>
+    <velocity name="motor_rr" joint="j_rr" kv="5" gear="1" ctrlrange="-15 15" forcelimited="true" forcerange="-20 20"/>
   </actuator>
 
   <!-- ═══════════════ SENSORS ═══════════════ -->

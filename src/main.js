@@ -173,7 +173,7 @@ export class MuJoCoDemo {
 
     if (!this.params["paused"]) {
       let timestep = this.model.opt.timestep;
-      if (timeMS - this.mujoco_time > 35.0) { this.mujoco_time = timeMS; }
+      if (timeMS - this.mujoco_time > 20.0) { this.mujoco_time = timeMS; }
       while (this.mujoco_time < timeMS) {
 
         // Automatic car animation for car scene
