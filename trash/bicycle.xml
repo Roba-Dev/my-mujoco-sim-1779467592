@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mujoco model="bicycle">
+    <compiler angle="radian"/>
+    <option timestep="0.002" gravity="0 0 -9.81"/>
+    <default>
+        <geom type="sphere" size="0.05" contype="1" conaffinity="1" condim="3"/>
+        <joint type="hinge" limited="true" range="-3.14 3.14" damping="0.1"/>
+        <motor gear="1" ctrllimited="true" ctrlrange="-1 1"/>
+    </default>
+    <asset>
+        <texture name="sky_texture" type="skybox" builtin="gradient" width="512" height="512"/>
+        <texture name="grid_texture" type="cube" builtin="checker" width="512" height="512"/>
+        <material name="grid_mat"/>
+        <material name="vehicle_mat"/>
+    </asset>
+    <worldbody>
+        <light dir="-1 -1 -1" pos="0 2 2" directional="true" diffuse="0.8 0.8 0.8" specular="0.8 0.8 0.8"/>
+        <light directional="true" diffuse="0.6 0.6 0.6" specular="0.6 0.6 0.6"/>
+        <geom name="floor" type="plane" pos="0 0 0" rgba="0.8 0.8 0.8 1" material="grid_mat" size="10 10 0.1"/>
+        <body name="frame" pos="0 0 0.8">
+            <body name="top_tube" pos="0 0 0">
+                <geom name="top_tube_geom" type="cylinder" size="0.05 0.8" fromto="0 0 0.8 0.4 0 1.4" material="vehicle_mat"/>
+            </body>
+            <body name="down_tube" pos="0 0 0">
+                <geom name="down_tube_geom" type="cylinder" size="0.05 0.8" fromto="0 0 0.8 -0.4 0 1.4" material="vehicle_mat"/>
+            </body>
+            <body name="seat_stay" pos="0 0 0">
+                <geom name="seat_stay_geom" type="cylinder" size="0.03 0.6" fromto="0.4 0 1.4 0.6 0 1.6" material="vehicle_mat"/>
+            </body>
+            <body name="seat" pos="0.6 0 1.6">
+                <geom name="seat_geom" type="sphere" size="0.08" material="vehicle_mat"/>
+            </body>
+            <body name="handlebar" pos="0.4 0 1.4">
+                <geom name="handlebar_geom" type="sphere" size="0.06" material="vehicle_mat"/>
+                <joint name="steer" type="hinge" axis="0 0 1" pos="0 0 0"/>
+            </body>
+            <body name="pedals" pos="-0.2 0 0.8">
+                <geom name="pedal_crankset_geom" type="sphere" size="0.05" material="vehicle_mat"/>
+                <joint name="pedal_hinge" type="hinge" axis="1 0 0" pos="0 0 0"/>
+            </body>
+        </body>
+        <body name="front_wheel_body" pos="0.6 0 1.4">
+            <geom name="front_wheel_geom" type="cylinder" size="0.3 0.05" material="vehicle_mat" euler="90 0 0"/>
+            <joint name="front_wheel_joint" type="hinge" axis="1 0 0" pos="0 0 0"/>
+        </body>
+        <body name="rear_wheel_body" pos="-0.4 0 1.4">
+            <geom name="rear_wheel_geom" type="cylinder" size="0.3 0.05" material="vehicle_mat" euler="90 0 0"/>
+            <joint name="rear_wheel_joint" type="hinge" axis="1 0 0" pos="0 0 0"/>
+        </body>
+        <camera name="track" mode="track" pos="0 2.5 1"/>
+    </worldbody>
+    <actuator>
+        <motor name="pedal_motor" joint="pedal_hinge" gear="100"/>
+        <motor name="steer_motor" joint="steer" gear="50"/>
+        <motor name="front_brake" joint="front_wheel_joint" gear="-200"/>
+        <motor name="rear_brake" joint="rear_wheel_joint" gear="-200"/>
+    </actuator>
+</mujoco>
