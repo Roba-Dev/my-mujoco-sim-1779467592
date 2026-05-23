@@ -1,54 +1,140 @@
-<mujoco model="four_wheeler_robot">
-  <compiler angle="radian"/>
-  <option timestep="0.002" gravity="0 0 -9.81"/>
+<mujoco model="4wb_robot">
 
-  <default>
-    <joint damping="0.1" armature="0.01"/>
-    <geom friction="1 0.005 0.0001" condim="3" density="1000"/>
-  </default>
+  <compiler angle="radian" autolimits="true"/>
+
+  <option timestep="0.005" gravity="0 0 -9.81" integrator="RK4"/>
+
+  <visual>
+    <headlight diffuse="0.6 0.6 0.6" ambient="0.3 0.3 0.3" specular="0 0 0"/>
+    <rgba haze="0.15 0.25 0.35 1"/>
+  </visual>
 
   <asset>
-    <material name="wheel_mat" rgba="0.1 0.1 0.1 1"/>
-    <material name="chassis_mat" rgba="0.2 0.6 0.8 1"/>
+    <texture type="skybox" builtin="gradient" rgb1="0.53 0.8 0.98" rgb2="0.1 0.2 0.4"
+             width="512" height="512"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.1 0.2 0.3" rgb2="0.2 0.3 0.4"
+             width="512" height="512" mark="edge" markrgb="0.2 0.3 0.4"/>
+    <material name="grid_mat" texture="grid" texrepeat="5 5" reflectance="0.2"/>
+    <material name="body_mat"  rgba="0.2 0.6 1.0 1"/>
+    <material name="wheel_mat" rgba="0.15 0.15 0.15 1"/>
+    <material name="sensor_mat" rgba="1.0 0.4 0.0 1"/>
   </asset>
 
   <worldbody>
-    <geom name="floor" type="plane" size="20 20 0.1" condim="3"/>
 
-    <body name="base" pos="0 0 0.12">
-      <joint type="free"/>
-      <geom type="box" size="0.2 0.12 0.05" material="chassis_mat" name="chassis"/>
+    <!-- Ground -->
+    <geom name="ground" type="plane" size="20 20 0.1" material="grid_mat" condim="3"
+          friction="1.0 0.005 0.0001"/>
 
-      <!-- Front Left wheel -->
-      <body name="wheel_fl" pos="0.25 0.14 0.03">
-        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fl_geom"/>
-        <joint type="hinge" axis="0 1 0" name="joint_wheel_fl" limited="true" range="-0.5 0.5"/>
+    <!-- Lighting -->
+    <light name="sun" pos="0 0 5" dir="0 0 -1" diffuse="0.8 0.8 0.8" specular="0.2 0.2 0.2"
+           castshadow="true"/>
+
+    <!-- ═══════════════ ROBOT BASE ═══════════════ -->
+    <body name="chassis" pos="0 0 0.18">
+      <freejoint name="root"/>
+
+      <!-- Main chassis body -->
+      <geom name="chassis_body" type="box" size="0.25 0.15 0.05"
+            material="body_mat" mass="3.0" condim="3"/>
+
+      <!-- Chassis top layer / deck -->
+      <geom name="chassis_deck" type="box" size="0.20 0.12 0.01" pos="0 0 0.06"
+            material="body_mat" mass="0.3"/>
+
+      <!-- IMU site -->
+      <site name="imu_site" pos="0 0 0" size="0.01"/>
+
+      <!-- ─── Front bumper ─── -->
+      <geom name="bumper_front" type="box" size="0.015 0.14 0.025" pos="0.265 0 -0.01"
+            rgba="0.9 0.2 0.2 1" mass="0.1"/>
+
+      <!-- ─── Rear bumper ─── -->
+      <geom name="bumper_rear" type="box" size="0.015 0.14 0.025" pos="-0.265 0 -0.01"
+            rgba="0.9 0.2 0.2 1" mass="0.1"/>
+
+      <!-- ─── Sensor tower (camera / lidar placeholder) ─── -->
+      <body name="sensor_tower" pos="0.10 0 0.07">
+        <geom name="tower_pole" type="cylinder" size="0.02 0.04"
+              material="sensor_mat" mass="0.15"/>
+        <geom name="lidar_head" type="cylinder" size="0.04 0.015" pos="0 0 0.055"
+              rgba="0.1 0.1 0.1 1" mass="0.1"/>
+        <!-- Forward-facing camera stub -->
+        <geom name="camera_lens" type="sphere" size="0.018" pos="0.04 0 0.055"
+              rgba="0.05 0.05 0.05 1" mass="0.02"/>
+        <camera name="front_cam" pos="0.05 0 0.06" xyaxes="0 -1 0 0 0 1"/>
       </body>
 
-      <!-- Front Right wheel -->
-      <body name="wheel_fr" pos="0.25 -0.14 0.03">
-        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fr_geom"/>
-        <joint type="hinge" axis="0 1 0" name="joint_wheel_fr" limited="true" range="-0.5 0.5"/>
+      <!-- ═══ WHEEL FL (Front-Left) ═══ -->
+      <body name="wheel_fl" pos="0.17 0.19 -0.03">
+        <joint name="j_fl" type="hinge" axis="0 1 0" limited="false"/>
+        <geom name="geom_fl" type="cylinder" size="0.07 0.04"
+              material="wheel_mat" mass="0.4" friction="1.5 0.005 0.0001"
+              euler="1.5708 0 0"/>
+        <!-- Wheel hub cap -->
+        <geom name="hub_fl" type="cylinder" size="0.025 0.042"
+              rgba="0.8 0.8 0.8 1" mass="0.05" euler="1.5708 0 0"/>
       </body>
 
-      <!-- Rear Left wheel -->
-      <body name="wheel_rl" pos="-0.25 0.14 0.03">
-        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rl_geom"/>
-        <joint type="hinge" axis="0 1 0" name="joint_wheel_rl" limited="true" range="-0.5 0.5"/>
+      <!-- ═══ WHEEL FR (Front-Right) ═══ -->
+      <body name="wheel_fr" pos="0.17 -0.19 -0.03">
+        <joint name="j_fr" type="hinge" axis="0 1 0" limited="false"/>
+        <geom name="geom_fr" type="cylinder" size="0.07 0.04"
+              material="wheel_mat" mass="0.4" friction="1.5 0.005 0.0001"
+              euler="1.5708 0 0"/>
+        <geom name="hub_fr" type="cylinder" size="0.025 0.042"
+              rgba="0.8 0.8 0.8 1" mass="0.05" euler="1.5708 0 0"/>
       </body>
 
-      <!-- Rear Right wheel -->
-      <body name="wheel_rr" pos="-0.25 -0.14 0.03">
-        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rr_geom"/>
-        <joint type="hinge" axis="0 1 0" name="joint_wheel_rr" limited="true" range="-0.5 0.5"/>
+      <!-- ═══ WHEEL RL (Rear-Left) ═══ -->
+      <body name="wheel_rl" pos="-0.17 0.19 -0.03">
+        <joint name="j_rl" type="hinge" axis="0 1 0" limited="false"/>
+        <geom name="geom_rl" type="cylinder" size="0.07 0.04"
+              material="wheel_mat" mass="0.4" friction="1.5 0.005 0.0001"
+              euler="1.5708 0 0"/>
+        <geom name="hub_rl" type="cylinder" size="0.025 0.042"
+              rgba="0.8 0.8 0.8 1" mass="0.05" euler="1.5708 0 0"/>
       </body>
+
+      <!-- ═══ WHEEL RR (Rear-Right) ═══ -->
+      <body name="wheel_rr" pos="-0.17 -0.19 -0.03">
+        <joint name="j_rr" type="hinge" axis="0 1 0" limited="false"/>
+        <geom name="geom_rr" type="cylinder" size="0.07 0.04"
+              material="wheel_mat" mass="0.4" friction="1.5 0.005 0.0001"
+              euler="1.5708 0 0"/>
+        <geom name="hub_rr" type="cylinder" size="0.025 0.042"
+              rgba="0.8 0.8 0.8 1" mass="0.05" euler="1.5708 0 0"/>
+      </body>
+
     </body>
+    <!-- ═══════════════ END ROBOT ═══════════════ -->
+
   </worldbody>
 
+  <!-- ═══════════════ ACTUATORS ═══════════════ -->
   <actuator>
-    <motor name="motor_wheel_fl" joint="joint_wheel_fl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
-    <motor name="motor_wheel_fr" joint="joint_wheel_fr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
-    <motor name="motor_wheel_rl" joint="joint_wheel_rl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
-    <motor name="motor_wheel_rr" joint="joint_wheel_rr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <!-- Velocity-controlled motors on all four wheels (differential / skid-steer capable) -->
+    <velocity name="motor_fl" joint="j_fl" kv="8" gear="1" ctrlrange="-20 20"/>
+    <velocity name="motor_fr" joint="j_fr" kv="8" gear="1" ctrlrange="-20 20"/>
+    <velocity name="motor_rl" joint="j_rl" kv="8" gear="1" ctrlrange="-20 20"/>
+    <velocity name="motor_rr" joint="j_rr" kv="8" gear="1" ctrlrange="-20 20"/>
   </actuator>
+
+  <!-- ═══════════════ SENSORS ═══════════════ -->
+  <sensor>
+    <!-- IMU-style sensors on chassis -->
+    <gyro    name="imu_gyro"    site="imu_site"/>
+    <accelerometer name="imu_accel" site="imu_site"/>
+    <!-- Wheel velocity feedback -->
+    <jointvel name="vel_fl" joint="j_fl"/>
+    <jointvel name="vel_fr" joint="j_fr"/>
+    <jointvel name="vel_rl" joint="j_rl"/>
+    <jointvel name="vel_rr" joint="j_rr"/>
+  </sensor>
+
+  <!-- IMU site attached to chassis (must be inside worldbody via site referencing) -->
+  <contact>
+    <!-- Ensure wheel–ground contacts are handled per wheel -->
+  </contact>
+
 </mujoco>
