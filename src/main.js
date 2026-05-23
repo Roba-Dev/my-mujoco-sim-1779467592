@@ -10,12 +10,21 @@ import   load_mujoco        from '../node_modules/mujoco-js/dist/mujoco_wasm.js'
 const mujoco = await load_mujoco();
 
 // Set up Emscripten's Virtual File System
-var initialScene = "empty_room.xml";
+var initialScene = "hexacopter.xml";
 mujoco.FS.mkdir('/working');
 mujoco.FS.mount(mujoco.MEMFS, { root: '.' }, '/working');
 mujoco.FS.writeFile("/working/" + initialScene, await(await fetch("./assets/scenes/" + initialScene)).text());
 
 export class MuJoCoDemo {
+  setMotorSpeed(motorName, speed){
+    // Find actuator index by name
+    const idx = this.model.actuator_names.findIndex(n=>n===motorName);
+    if(idx>=0){
+      this.data.ctrl[idx]=speed;
+    } else {
+      console.warn('Motor', motorName,'not found');
+    }
+  }
   constructor() {
     this.mujoco = mujoco;
 
