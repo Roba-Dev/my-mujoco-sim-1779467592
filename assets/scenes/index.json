@@ -1,5 +1,7 @@
 [
     "empty_room.xml",
     "unitree_g1.xml",
-    "hexacopter.xml"
+    "hexacopter.xml",
+    "4wb_robot.xml",
+    "4wheeler_robot.xml"
 ]

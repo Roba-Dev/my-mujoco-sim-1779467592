@@ -1,0 +1,54 @@
+<mujoco model="four_wheeler_robot">
+  <compiler angle="radian"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <default>
+    <joint damping="0.1" armature="0.01"/>
+    <geom friction="1 0.005 0.0001" condim="3" density="1000"/>
+  </default>
+
+  <asset>
+    <material name="wheel_mat" rgba="0.1 0.1 0.1 1"/>
+    <material name="chassis_mat" rgba="0.2 0.6 0.8 1"/>
+  </asset>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="20 20 0.1" condim="3"/>
+
+    <body name="base" pos="0 0 0.12">
+      <joint type="free"/>
+      <geom type="box" size="0.2 0.12 0.05" material="chassis_mat" name="chassis"/>
+
+      <!-- Front Left wheel -->
+      <body name="wheel_fl" pos="0.25 0.14 0.03">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fl_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_fl" limited="true" range="-0.5 0.5"/>
+      </body>
+
+      <!-- Front Right wheel -->
+      <body name="wheel_fr" pos="0.25 -0.14 0.03">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fr_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_fr" limited="true" range="-0.5 0.5"/>
+      </body>
+
+      <!-- Rear Left wheel -->
+      <body name="wheel_rl" pos="-0.25 0.14 0.03">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rl_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_rl" limited="true" range="-0.5 0.5"/>
+      </body>
+
+      <!-- Rear Right wheel -->
+      <body name="wheel_rr" pos="-0.25 -0.14 0.03">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rr_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_rr" limited="true" range="-0.5 0.5"/>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor name="motor_wheel_fl" joint="joint_wheel_fl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_fr" joint="joint_wheel_fr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_rl" joint="joint_wheel_rl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_rr" joint="joint_wheel_rr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+  </actuator>
+</mujoco>

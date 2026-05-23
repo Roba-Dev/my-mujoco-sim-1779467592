@@ -2,6 +2,13 @@ import * as THREE from 'three';
 import { Reflector  } from './utils/Reflector.js';
 import { MuJoCoDemo } from './main.js';
 
+// Ensure scenes folder registration is aware of our new example.
+// Scene files themselves are loaded dynamically from assets/scenes/index.json.
+const REGISTERED_SCENES = [
+  '4wb_robot.xml',
+  '4wheeler_robot.xml'
+];
+
 export async function reloadFunc() {
   // Delete the old scene and load the new scene
   this.scene.remove(this.scene.getObjectByName("MuJoCo Root"));

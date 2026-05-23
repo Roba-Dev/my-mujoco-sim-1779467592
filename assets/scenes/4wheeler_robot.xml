@@ -1,0 +1,55 @@
+<mujoco model="four_wheeler_robot">
+  <compiler angle="radian" meshdir="meshes" texturedir="textures"/>
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+  <default>
+    <joint damping="0.1" armature="0.01"/>
+    <geom friction="1 0.005 0.0001" condim="3" density="1000"/>
+    <motor gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+  </default>
+  <asset>
+    <material name="wheel_mat" rgba="0.1 0.1 0.1 1"/>
+    <material name="chassis_mat" rgba="0.2 0.6 0.8 1"/>
+    <mesh name="lidar_mesh" file="lidar.obj" scale="0.1 0.1 0.1"/>
+  </asset>
+  <worldbody>
+    <geom name="floor" type="plane" size="20 20 0.1" condim="3"/>
+    <body name="base" pos="0 0 0.1" childclass="robot">
+      <freejoint/>
+      <geom type="box" size="0.2 0.3 0.05" material="chassis_mat" name="chassis"/>
+      <!-- wheels -->
+      <body name="wheel_fl" pos="0.25 0.2 0.05">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fl_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_fl" limited="true" range="-0.5 0.5"/>
+        <motor joint="joint_wheel_fl" name="motor_wheel_fl" gear="100"/>
+      </body>
+      <body name="wheel_fr" pos="0.25 -0.2 0.05">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_fr_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_fr" limited="true" range="-0.5 0.5"/>
+        <motor joint="joint_wheel_fr" name="motor_wheel_fr" gear="100"/>
+      </body>
+      <body name="wheel_rl" pos="-0.25 0.2 0.05">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rl_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_rl" limited="true" range="-0.5 0.5"/>
+        <motor joint="joint_wheel_rl" name="motor_wheel_rl" gear="100"/>
+      </body>
+      <body name="wheel_rr" pos="-0.25 -0.2 0.05">
+        <geom type="cylinder" size="0.05 0.02" material="wheel_mat" name="wheel_rr_geom"/>
+        <joint type="hinge" axis="0 1 0" name="joint_wheel_rr" limited="true" range="-0.5 0.5"/>
+        <motor joint="joint_wheel_rr" name="motor_wheel_rr" gear="100"/>
+      </body>
+      <!-- lidar -->
+      <body name="lidar" pos="0 0 0.15">
+        <geom type="sphere" size="0.02" material="chassis_mat" name="lidar_body"/>
+        <sensor type="rangefinder" name="lidar_sensor" site="lidar_site"/>
+        <site name="lidar_site" pos="0 0 0" size="0.01"/>
+        <geom type="mesh" mesh="lidar_mesh" name="lidar_vis" material="chassis_mat"/>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="motor_wheel_fl" joint="joint_wheel_fl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_fr" joint="joint_wheel_fr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_rl" joint="joint_wheel_rl" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor_wheel_rr" joint="joint_wheel_rr" gear="100" ctrllimited="true" ctrlrange="-1 1"/>
+  </actuator>
+</mujoco>
